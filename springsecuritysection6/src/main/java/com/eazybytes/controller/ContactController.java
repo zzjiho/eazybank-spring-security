@@ -1,12 +1,34 @@
 package com.eazybytes.controller;
 
+import com.eazybytes.model.Contact;
+import com.eazybytes.repository.ContactRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.Date;
+import java.util.Random;
 
 @RestController
 public class ContactController {
+
+    @Autowired
+    private ContactRepository contactRepository;
+
+
     @GetMapping("/contact")
-    public String saveContactInquiryDetails() {
-        return "inquiry!!";
+    public Contact saveContactInquiryDetails(@RequestBody Contact contact) {
+        contact.setContactId(getServiceReqNumber());
+        contact.setCreateDt(new Date(System.currentTimeMillis()));
+        return contactRepository.save(contact);
     }
+
+    //contact id는 10자리의 랜덤 숫자로 구성하기위해 수동으로 작업
+    private String getServiceReqNumber() {
+        Random random = new Random();
+        int ranNum = random.nextInt(999999999 - 9999) + 9999;
+        return "SR"+ranNum;
+    }
+
 }
