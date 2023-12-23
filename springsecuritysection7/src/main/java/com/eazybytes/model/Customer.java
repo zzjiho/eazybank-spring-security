@@ -32,6 +32,10 @@ public class Customer {
     @Column(name = "create_dt")
     private String createDt;
 
+    @JsonIgnore //json response를 보내지 않겠다. 권한 정보는 오직 서버에서만 사용한다.
+    @OneToMany(mappedBy = "customer", fetch = FetchType.EAGER)
+    private Set<Authority> authorities;
+
     public int getId() {
         return id;
     }
@@ -86,6 +90,14 @@ public class Customer {
 
     public void setCreateDt(String createDt) {
         this.createDt = createDt;
+    }
+
+    public Set<Authority> getAuthorities() {
+        return authorities;
+    }
+
+    public void setAuthorities(Set<Authority> authorities) {
+        this.authorities = authorities;
     }
 }
 
